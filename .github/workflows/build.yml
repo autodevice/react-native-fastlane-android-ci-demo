@@ -32,7 +32,6 @@ jobs:
         with:
           ruby-version: '3.3'
           bundler-cache: true
-          working-directory: android
 
       - name: Build with Fastlane
         working-directory: android
