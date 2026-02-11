@@ -1,0 +1,44 @@
+name: Build & Upload to AutoDevice
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+          working-directory: android
+
+      - name: Build with Fastlane
+        working-directory: android
+        run: bundle exec fastlane android build
+
+      - name: Upload to AutoDevice
+        run: |
+          curl -X POST "https://api.autodevice.io/v1/builds" \
+            -H "Authorization: Bearer ${{ secrets.AUTODEVICE_API_KEY }}" \
+            -F "file=@android/app/build/outputs/apk/debug/app-debug.apk" \
+            -F "platform=android"

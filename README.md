@@ -1,15 +1,20 @@
-# react-native-fastlane-android-ci-demo
+# RNFLAndroidDemo
 
-React Native Android CI demo using Fastlane for automating RN Android builds
+A React Native Android demo app with Fastlane and CI/CD via GitHub Actions.
 
-## Overview
+## Build
 
-This repository is a demo project for [AutoDevice](https://autodevice.dev) CI integration.
+```bash
+npm install
+cd android && bundle install && bundle exec fastlane android build
+```
 
-## Getting Started
+The debug APK will be at `android/app/build/outputs/apk/debug/app-debug.apk`.
 
-Coming soon.
+## CI/CD
 
-## License
+The GitHub Actions workflow builds the debug APK using Fastlane and uploads it to AutoDevice on every push to `main`.
 
-MIT
+### Required Secrets
+
+- `AUTODEVICE_API_KEY` — API key for AutoDevice
